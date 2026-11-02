@@ -1,0 +1,14 @@
+# Environnement Python local
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Données (près de 400 Mo, à télécharger, voir le README) et fichier du modèle généré par le notebook
+data/
+*.zip
+
+# Données de l'émulateur de stockage Azurite
+.azurite/
+
+# Réglages locaux de l'Azure Function (chaînes de connexion, ne doivent jamais être publiés)
+azure_function/local.settings.json

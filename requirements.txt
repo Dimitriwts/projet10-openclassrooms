@@ -1,0 +1,25 @@
+# Bibliothèques du notebook de modélisation et de l'application Streamlit (versions figées pour que
+# chacun retrouve exactement les mêmes résultats). Celles de l'Azure Function sont dans
+# azure_function/requirements.txt, car Azure n'installe que ce dont la Function a besoin.
+
+# Manipulation des données et calcul
+numpy==2.5.4
+pandas==3.1.0
+scipy==1.18.1
+scikit-learn==1.9.1
+threadpoolctl==3.7.0
+
+# Filtrage collaboratif (ALS)
+implicit==0.7.3
+
+# Graphiques et exécution du notebook
+matplotlib==3.11.2
+jupyter==1.1.1
+ipykernel==7.4.0
+
+# Application de démonstration
+streamlit==1.66.1
+requests==2.34.2
+
+# Pour lancer l'Azure Function en local depuis le même environnement
+azure-functions==2.3.0
