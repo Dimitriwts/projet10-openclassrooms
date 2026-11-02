@@ -1,0 +1,2 @@
+azure-functions==2.3.0
+numpy==2.5.4
