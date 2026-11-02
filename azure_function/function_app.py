@@ -7,7 +7,8 @@ quel fichier on veut, et on n'écrit aucun code de connexion au stockage. Pour m
 le Blob Storage, sans redéployer la fonction.
 
 Deux adresses sont exposées :
-- /api/recommandations?user_id=123 : les 5 articles recommandés pour cet utilisateur ;
+- /api/recommandations?user_id=123 : les 5 articles recommandés pour cet utilisateur, avec l'explication
+  de chaque choix et un résumé de ce qu'il a déjà lu ;
 - /api/utilisateurs?n=100 : une liste d'identifiants d'utilisateurs, pour l'application de démonstration.
 """
 
@@ -48,10 +49,13 @@ def recommandations(req: func.HttpRequest, fichier: func.InputStream) -> func.Ht
     user_id = int(texte)
 
     modele = charger_modele(fichier.read())
-    articles, nouvel_utilisateur = recommander(modele, user_id, k=5)
-    logging.info("Recommandations pour %s (nouvel utilisateur : %s) : %s", user_id, nouvel_utilisateur, articles)
+    resultat = recommander(modele, user_id, k=5)
+    articles = [r["article_id"] for r in resultat["recommandations"]]
+    logging.info("Recommandations pour %s (nouvel utilisateur : %s) : %s",
+                 user_id, resultat["nouvel_utilisateur"], articles)
 
-    return reponse_json({"user_id": user_id, "nouvel_utilisateur": nouvel_utilisateur, "articles": articles})
+    # La réponse contient les 5 articles et, pour chacun, de quoi comprendre pourquoi il a été choisi
+    return reponse_json(resultat)
 
 
 @app.route(route="utilisateurs", methods=["GET"])

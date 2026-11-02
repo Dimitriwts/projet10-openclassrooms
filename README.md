@@ -61,7 +61,7 @@ il fait 0,6 point de moins (écart significatif d'après le test de McNemar). Al
 fichier du modèle et non dans le code, pour pouvoir être ajusté sans redéploiement.
 
 Les embeddings sont réduits de 250 à 52 valeurs par une ACP (analyse en composantes principales), qui conserve
-95,1 % de l'information. Le fichier du modèle passe ainsi à 15,1 Mo au lieu des 364 Mo d'origine.
+95,1 % de l'information. Le fichier du modèle passe ainsi à 15,4 Mo au lieu des 364 Mo d'origine.
 
 ## Organisation du dépôt
 
