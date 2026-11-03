@@ -50,6 +50,11 @@ def nombre(x, decimales=2):
     return f"{x:.{decimales}f}".replace(".", ",")
 
 
+def lectures(n):
+    """« 1 lecture », « 2 lectures » : accorde le mot au nombre."""
+    return f"{n} lecture{'s' if n > 1 else ''}"
+
+
 def explication(article, nouvel_utilisateur):
     """Une phrase qui dit pourquoi cet article a été choisi, à partir des chiffres renvoyés par la Function."""
     rang = article["rang_popularite"]
@@ -59,10 +64,10 @@ def explication(article, nouvel_utilisateur):
     )
     if nouvel_utilisateur:
         return phrase + "."
-    lectures = article["lectures_meme_categorie"]
+    deja = article["lectures_meme_categorie"]
     categorie = (
-        f"catégorie {article['categorie']} déjà lue {lectures} fois par ce lecteur"
-        if lectures else f"catégorie {article['categorie']} jamais lue par ce lecteur"
+        f"catégorie {article['categorie']} déjà lue {deja} fois par ce lecteur"
+        if deja else f"catégorie {article['categorie']} jamais lue par ce lecteur"
     )
     return f"{phrase} ; {categorie} ; ressemblance avec ses lectures : {nombre(article['similarite'])}."
 
@@ -132,21 +137,16 @@ if nouvel_utilisateur:
 else:
     a, b = st.columns(2)
     a.metric("Articles déjà lus", lecteur["nb_lectures"])
-    b.metric(
-        "Catégorie qu'il lit le plus",
-        f"n° {lecteur['categories_frequentes'][0]['categorie']}",
-        f"{lecteur['categories_frequentes'][0]['nb_lectures']} lectures",
-        delta_color="off",
-    )
+    b.metric("Catégorie qu'il lit le plus", f"n° {lecteur['categories_frequentes'][0]['categorie']}")
     frequentes = ", ".join(
-        f"n° {c['categorie']} ({c['nb_lectures']} lectures)" for c in lecteur["categories_frequentes"]
+        f"n° {c['categorie']} ({lectures(c['nb_lectures'])})" for c in lecteur["categories_frequentes"]
     )
     st.write(f"Ses catégories préférées : {frequentes}.")
     st.write("Ses 5 dernières lectures :")
+    # L'âge n'est pas affiché ici : calculé à la date de référence, il ne dirait rien du moment de la lecture
     st.dataframe(
-        pd.DataFrame(lecteur["dernieres_lectures"]).rename(columns={
-            "article_id": "Article", "categorie": "Catégorie", "publie_le": "Publié le (UTC)",
-            "age_heures": "Âge aujourd'hui (h)", "nb_mots": "Mots",
+        pd.DataFrame(lecteur["dernieres_lectures"]).drop(columns=["age_heures"]).rename(columns={
+            "article_id": "Article", "categorie": "Catégorie", "publie_le": "Publié le (UTC)", "nb_mots": "Mots",
         }),
         hide_index=True,
     )
